@@ -18,6 +18,7 @@ void CallProcedure(string pName)
 	Py_Initialize();
 	PyObject* my_module = PyImport_ImportModule("setup");
 	PyErr_Print();
+
 	PyObject* my_function = PyObject_GetAttrString(my_module, procname);
 	PyObject* my_result = PyObject_CallObject(my_function, NULL);
 	Py_Finalize();
@@ -124,40 +125,45 @@ int callIntFunc(string proc, int param)
 // Displays a list of options to user
 void displayMenu() {
 	cout << endl;
-	cout << "1: Display a Multiplication Table" << endl;
-	cout << "2: Double a Value" << endl;
-	cout << "3: Exit" << endl;
-	cout << "Enter your selection as a number 1, 2, 3." << endl;
+	cout << "1: Produce a list of all items purchased in a day" << endl;
+	cout << "2: Produce a number respresenting how many times an item was purchased" << endl;
+	cout << "3: Produce a histogram listing all items purchased in a day" << endl;
+	cout << "4: Exit the program" << endl;
+	cout << "Enter your selection as a number 1, 2, 3, 4." << endl;
 }
 
 void menuSelection() {
 	int option;
-	int v;
+	string item;
 	do
 	{
 		displayMenu();
 		cin >> option;
 		if (option == 1) {
-			cout << "Enter a number: " << endl;
-			cin >> v;
 			// Calls function from Python file
-			cout << callIntFunc("MultiplicationTable", v);
+			CallProcedure("ListItemsPurchased");
 		}
 		else if (option == 2) {
-			cout << "Enter a number: " << endl;
-			cin >> v;
+			cout << endl;
+			cout << "Enter an item: " << endl;
+			cin >> item;
 			// Calls function from Python file
-			cout << callIntFunc("DoubleValue", v);
+			cout << callIntFunc("FrequencyOfItem", item);
 		}
 		else if (option == 3) {
+			// Calls function from Python file and produces histogram representing frequency.dat file
+			CallProcedure("ItemHistogram");
+		}
+		else if (option == 4) {
 			cout << endl;
 			cout << "You have exited the application." << endl;
 			break;
 		}
 		else {
+			cout << endl;
 			cout << "You have entered an invalid input." << endl;
 		}
-	} while (option != 3);
+	} while (option != 4);
 }
 
 
